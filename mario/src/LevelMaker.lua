@@ -19,6 +19,9 @@ function LevelMaker.generate(width, height)
 
     local tileID = TILE_ID_GROUND
     
+    local poleFrame = math.random(1, 6)
+    local flagFrame = poleFrame + 6
+
     -- whether we should draw our tiles with toppers
     local topper = true
     local tileset = math.random(20)
@@ -141,8 +144,50 @@ function LevelMaker.generate(width, height)
                             if ghasKey then
                                 gSounds['pickup']:play()
                                 obj.hit = true
+                                -- obj.locked = true
                                 
-                            -- put code for flag spawn here
+                                    -- put code for flag spawn here
+                                 
+                                local pole = GameObject{
+                                    texture = 'pole',
+                                    x = (obj.x + 3),
+                                    y = (blockHeight - 4) * TILE_SIZE,
+                                    width = 16,
+                                    height = 48,
+                                    frame = poleFrame,
+                                    solid = false,
+                                    consumable = true,
+                                    collidable = true
+
+                                    -- put onConsume code here to generate a new level
+                                    
+                                }                               
+                                local flags = GameObject{
+                                    texture = 'flags',
+                                    x = (obj.x + 6) ,
+                                    y = (blockHeight - 2) * TILE_SIZE,
+                                    width = 16,
+                                    height = 16,
+                                    frame = flagFrame,
+                                    solid = false,
+                                    consumable = true,
+                                    collidable = true
+
+                                    -- put onConsume code here to generate a new level
+
+                                }
+                                
+                                -- Timer.tween(0.5, {
+                                --     y = (blockHeight - 4) * TILE_SIZE + 4
+                                -- })
+
+                                Timer.tween(1.0, {
+                                    [flags] = {y = (blockHeight - 4) * TILE_SIZE + 4}
+                                })
+                                gSounds['powerup-reveal']:play()
+
+                                table.insert(objects, pole)
+                                table.insert(objects, flags)
 
 
                             end
